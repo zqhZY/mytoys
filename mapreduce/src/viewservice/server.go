@@ -126,7 +126,7 @@ func (vs *ViewServer) tick() {
     if k != "" {
       vs.tickcounter[k]++
     }
-	
+
     if vs.tickcounter[k] == DeadPings {
       if k == primary{
         // change backup to primary
@@ -137,33 +137,33 @@ func (vs *ViewServer) tick() {
         elem := vs.backups.Front()
         if elem != nil{
          fmt.Printf("get backup(%s) form backups queue.\n", elem.Value.(string))
-		 vs.tmpview.Backup = elem.Value.(string)
+         vs.tmpview.Backup = elem.Value.(string)
          vs.RemoveBackupElem(vs.tmpview.Backup)
-		} else{
-		 vs.tmpview.Backup = ""
-		}
+        } else{
+         vs.tmpview.Backup = ""
+        }
         if vs.view.Acked{
-          vs.CopyViewIfNeeded()   
-		}
+          vs.CopyViewIfNeeded()
+        }
       } else if k == backup {
         fmt.Printf("backup: %s is dead, now change backup to blank.\n", backup)
         //if backups list have elems , change one to view.Backup
         elem := vs.backups.Front()
         if elem != nil{
          fmt.Printf("get backup(%s) form backups queue.\n", elem.Value.(string))
-		 vs.tmpview.Backup = elem.Value.(string)
+         vs.tmpview.Backup = elem.Value.(string)
          vs.RemoveBackupElem(vs.view.Backup)
-		} else{
-		 vs.tmpview.Backup = ""
-		}
-		
+        } else{
+         vs.tmpview.Backup = ""
+        }
+
         if vs.view.Acked{
-          vs.CopyViewIfNeeded()   
-		}
+          vs.CopyViewIfNeeded()
+        }
       } else {
         fmt.Printf("backups list elem %s is dead, now delete it from queue.\n", backup)
         vs.RemoveBackupElem(k)
-	  }
+      }
       // todo when to change the view
       // vs.tickcounter[k] = 0
       delete(vs.tickcounter, k)

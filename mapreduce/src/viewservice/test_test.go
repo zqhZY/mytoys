@@ -16,7 +16,7 @@ const (
 func check(t *testing.T, ck *Clerk, p string, b string, n uint) {
   view, _ := ck.Get()
   if view.Primary != p {
-    t.Fatalf("######wanted primary %v, got %v", p, view.Primary)
+    t.Fatalf("wanted primary %v, got %v", p, view.Primary)
   }
   if view.Backup != b {
     t.Fatalf("wanted backup %v, got %v", b, view.Backup)
@@ -25,7 +25,7 @@ func check(t *testing.T, ck *Clerk, p string, b string, n uint) {
     t.Fatalf("wanted viewnum %v, got %v", n, view.Viewnum)
   }
   if ck.Primary() != p {
-    t.Fatalf("----wanted primary %v, got %v", p, ck.Primary())
+    t.Fatalf("wanted primary %v, got %v", p, ck.Primary())
   }
 }
 
