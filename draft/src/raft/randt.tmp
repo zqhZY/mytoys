@@ -1,0 +1,21 @@
+package main
+import "fmt"
+import "math/rand"
+import "time"
+
+func main() {
+	i := 1
+	i = nil
+	if i == nil{
+		fmt.Println("nil")
+	}
+}
+
+func randInt(start int, end int) int {
+	if start >= end || start == 0 || end == 0{
+		return end
+	}
+    rand.Seed(int64(time.Now().Nanosecond()))
+	return rand.Intn(end-start) + start	
+
+}
