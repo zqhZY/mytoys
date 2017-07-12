@@ -48,9 +48,10 @@ def getSentenceFeatures(tokens, wordVectors, sentence):
 
     sentVector = np.zeros((wordVectors.shape[1],))
 
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    for word in sentence:
+        indices = tokens[word]
+        sentVector += wordVectors[indices]
+    sentVector /= len(sentence)
 
     assert sentVector.shape == (wordVectors.shape[1],)
     return sentVector
@@ -62,9 +63,9 @@ def getRegularizationValues():
     Return a sorted list of values to try.
     """
     values = None   # Assign a list of floats in the block below
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+
+    values = np.linspace(0.000001, 2, 100)
+
     return sorted(values)
 
 
@@ -86,9 +87,11 @@ def chooseBestModel(results):
     """
     bestResult = None
 
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    max_acc = -1
+    for result in results:
+        if result["dev"] > max_acc:
+            max_acc = result["dev"]
+            bestResult = result
 
     return bestResult
 
@@ -193,6 +196,7 @@ def main(args):
         print "Training for reg=%f" % reg
         # Note: add a very small number to regularization to please the library
         clf = LogisticRegression(C=1.0/(reg + 1e-12))
+        print trainLabels
         clf.fit(trainFeatures, trainLabels)
 
         # Test on train set

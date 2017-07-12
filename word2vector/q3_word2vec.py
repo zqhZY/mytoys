@@ -56,13 +56,13 @@ def softmaxCostAndGradient(predicted, target, outputVectors, dataset):
 
     # print predicted.shape # 1 x N
     y_ = softmax(np.dot(predicted, outputVectors.T))  # 1 x V
-    cost = -np.log(y_[target])
+    cost = -np.log(y_[target]) # only y_[target] is 1 , others is 0.
 
     deta = y_  # 1 x V
     deta[target] -= 1  # error in last layer
 
-    grad = np.dot(deta.reshape(V, 1), predicted.reshape(1, N))  # should be V x N
-    gradPred = np.dot(outputVectors.T, deta)  # 1 x N
+    grad = np.dot(deta.reshape(V, 1), predicted.reshape(1, N))  # grad(outputVectors) should be V x N
+    gradPred = np.dot(outputVectors.T, deta)  # grad(predicted) 1 x N
 
     return cost, gradPred, grad
 
@@ -91,6 +91,13 @@ def negSamplingCostAndGradient(predicted, target, outputVectors, dataset,
     Note: See test_word2vec below for dataset's initialization.
 
     Arguments/Return Specifications: same as softmaxCostAndGradient
+
+    *                   *
+    *          *        *
+    *          *        *
+    *          *        *
+    *                   *
+    v-dim     n-dim     v-dim
     """
 
     # assert predicted.shape[-1] == outputVectors.shape[-1]
@@ -160,19 +167,14 @@ def skipgram(currentWord, C, contextWords, tokens, inputVectors, outputVectors,
     grad -- the gradient with respect to the word vectors
     """
 
-    # print currentWord
-    # print C
-    # print contextWords
-    # print tokens
-    # print np.shape(inputVectors)
-    # print np.shape(outputVectors)
-
     cost = 0.0
     gradIn = np.zeros(inputVectors.shape)
     gradOut = np.zeros(outputVectors.shape)
 
     center_index = tokens[currentWord]
     predicted = inputVectors[center_index]
+
+    # all context words cost and grad should added as one step optimize.
     for word in contextWords:
         target = tokens[word]
         cost_, gradPred, grad = word2vecCostAndGradient(predicted, target, outputVectors, dataset)
